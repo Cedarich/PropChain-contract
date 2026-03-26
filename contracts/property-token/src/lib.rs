@@ -80,7 +80,9 @@ mod property_token {
                 Error::BridgeNotSupported => write!(f, "Bridge functionality not supported"),
                 Error::InvalidChain => write!(f, "Invalid chain ID"),
                 Error::BridgeLocked => write!(f, "Token is locked in bridge"),
-                Error::InsufficientSignatures => write!(f, "Insufficient signatures for bridge operation"),
+                Error::InsufficientSignatures => {
+                    write!(f, "Insufficient signatures for bridge operation")
+                }
                 Error::RequestExpired => write!(f, "Bridge request has expired"),
                 Error::InvalidRequest => write!(f, "Invalid bridge request"),
                 Error::BridgePaused => write!(f, "Bridge operations are paused"),
@@ -140,14 +142,20 @@ mod property_token {
                 Error::BridgeNotSupported => "Cross-chain bridging is not supported for this token",
                 Error::InvalidChain => "The destination chain ID is invalid",
                 Error::BridgeLocked => "The token is currently locked in a bridge operation",
-                Error::InsufficientSignatures => "Not enough signatures collected for bridge operation",
-                Error::RequestExpired => "The bridge request has expired and can no longer be executed",
+                Error::InsufficientSignatures => {
+                    "Not enough signatures collected for bridge operation"
+                }
+                Error::RequestExpired => {
+                    "The bridge request has expired and can no longer be executed"
+                }
                 Error::InvalidRequest => "The bridge request is invalid or malformed",
                 Error::BridgePaused => "Bridge operations are temporarily paused",
                 Error::GasLimitExceeded => "The operation exceeded the gas limit",
                 Error::MetadataCorruption => "The token metadata has been corrupted",
                 Error::InvalidBridgeOperator => "The bridge operator is not authorized",
-                Error::DuplicateBridgeRequest => "A bridge request with these parameters already exists",
+                Error::DuplicateBridgeRequest => {
+                    "A bridge request with these parameters already exists"
+                }
                 Error::BridgeTimeout => "The bridge operation timed out",
                 Error::AlreadySigned => "You have already signed this bridge request",
                 Error::InsufficientBalance => "Account has insufficient balance",
@@ -980,7 +988,8 @@ mod property_token {
                 return Err(Error::Unauthorized);
             }
             self.management_agent.insert(token_id, &agent);
-            self.env().emit_event(ManagementAgentAssigned { token_id, agent });
+            self.env()
+                .emit_event(ManagementAgentAssigned { token_id, agent });
             Ok(())
         }
 
@@ -3104,14 +3113,9 @@ mod property_token {
             contract
                 .assign_management_agent(token_id, accounts.bob)
                 .expect("agent");
-            assert_eq!(
-                contract.get_management_agent(token_id),
-                Some(accounts.bob)
-            );
+            assert_eq!(contract.get_management_agent(token_id), Some(accounts.bob));
 
-            contract
-                .clear_management_agent(token_id)
-                .expect("clear");
+            contract.clear_management_agent(token_id).expect("clear");
             assert_eq!(contract.get_management_agent(token_id), None);
         }
     }
